@@ -1,11 +1,15 @@
+/** @type {import('@types/express')} */
 const express = require('express');
+const path = require('path');
 const { engine } = require('express-handlebars');
+
+const { getFortune } = require('./lib/fortune');
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-console.log(111);
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
@@ -16,7 +20,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/about', (req, res) => {
-    res.render('about');
+    res.render('about', { fortune: getFortune() });
 });
 
 app.use((req, res) => {
